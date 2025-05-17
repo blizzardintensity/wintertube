@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - WinterTube</title>
+</head>
+<body>
+    <h1>User Profile</h1>
+
+    <!-- Display user info -->
+    <div id="userInfo">
+        <p><strong>Email:</strong> <span id="userEmail"></span></p>
+        <p><strong>Username:</strong> <span id="username"></span></p>
+    </div>
+
+    <!-- Logout Button -->
+    <button id="logoutBtn">Log Out</button>
+
+    <p><a href="index.html">Back to Home</a></p>
+
+    <!-- Include Firebase Config -->
+    <script type="module" src="firebase.js"></script>
+
+    <script type="module">
+        // Import Firebase Auth methods
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
+
+        const auth = getAuth();
+
+        // Listen for authentication state changes (check if the user is logged in)
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, show user info
+                document.getElementById('userEmail').textContent = user.email;
+                document.getElementById('username').textContent = user.displayName || 'N/A'; // Display username or 'N/A' if not set
+            } else {
+                // No user is signed in, redirect to login page
+                window.location.href = "login.html";
+            }
+        });
+
+        // Log out functionality
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            signOut(auth).then(() => {
+                // Sign-out successful
+                alert("You have logged out successfully.");
+                window.location.href = "login.html"; // Redirect to login page
+            }).catch((error) => {
+                console.error("Error during logout:", error.message);
+                alert("An error occurred while logging out. Please try again.");
+            });
+        });
+    </script>
+</body>
+</html>
