@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - WinterTube</title>
+</head>
+<body>
+    <h1>Login to WinterTube</h1>
+
+    <!-- Login Form -->
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required><br><br>
+        <input type="password" id="password" placeholder="Password" required><br><br>
+        <button type="submit">Login</button>
+    </form>
+
+    <p>Don't have an account? <a href="register.html">Register here</a></p>
+
+    <!-- Include Firebase Config -->
+    <script type="module" src="firebase.js"></script>
+
+    <script type="module">
+        // Import Firebase Auth methods
+        import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
+
+        // Login Form Submission
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            // Sign the user in
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    console.log("User logged in successfully:", user);
+                    alert("Login successful!");
+                    window.location.href = "index.html"; // Redirect to the main page after login
+                })
+                .catch((error) => {
+                    console.error("Error during login:", error.message);
+                    alert("Login failed. Please check your credentials and try again.");
+                });
+        });
+    </script>
+</body>
+</html>
