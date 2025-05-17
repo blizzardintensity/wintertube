@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - WinterTube</title>
+</head>
+<body>
+    <h1>Register for WinterTube</h1>
+
+    <!-- Registration Form -->
+    <form id="registerForm">
+        <input type="email" id="email" placeholder="Email" required><br><br>
+        <input type="text" id="username" placeholder="Username" required><br><br>
+        <input type="password" id="password" placeholder="Password" required><br><br>
+        <button type="submit">Register</button>
+    </form>
+
+    <p>Already have an account? <a href="login.html">Login here</a></p>
+
+    <!-- Include Firebase Config -->
+    <script type="module" src="firebase.js"></script>
+
+    <script type="module">
+        // Import Firebase Auth methods
+        import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
+
+        // Registration Form Submission
+        document.getElementById("registerForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // Register the user with Firebase
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    console.log("User registered successfully:", user);
+
+                    // Optionally, you can store the username and other details in Firestore or Realtime Database
+                    alert("Registration successful! You can now log in.");
+                    window.location.href = "login.html"; // Redirect to login page
+                })
+                .catch((error) => {
+                    console.error("Error during registration:", error.message);
+                    alert("Registration failed. Please try again.");
+                });
+        });
+    </script>
+</body>
+</html>
